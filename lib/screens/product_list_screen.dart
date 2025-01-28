@@ -5,11 +5,14 @@ import 'package:mini_ec/bloc/product/product_event.dart';
 import 'package:mini_ec/bloc/product/product_state.dart';
 
 class ProductListScreen extends StatelessWidget {
+  const ProductListScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Products'),
+      appBar: AppBar(centerTitle: true,
+        title: Text('Products',
+        style: TextStyle(fontWeight: FontWeight.bold),),
         actions: [
           IconButton(
             icon: Icon(Icons.shopping_cart),
@@ -23,15 +26,15 @@ class ProductListScreen extends StatelessWidget {
             context.read<ProductBloc>().add(LoadProducts());
             return Center(child: CircularProgressIndicator());
           }
-          
+
           if (state is ProductLoading) {
             return Center(child: CircularProgressIndicator());
           }
-          
+
           if (state is ProductError) {
             return Center(child: Text('Error: ${state.message}'));
           }
-          
+
           if (state is ProductLoaded) {
             return GridView.builder(
               padding: EdgeInsets.all(16),
@@ -76,7 +79,8 @@ class ProductListScreen extends StatelessWidget {
                               ),
                               SizedBox(height: 4),
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
                                     '\$${product.price.toStringAsFixed(2)}',
@@ -87,7 +91,8 @@ class ProductListScreen extends StatelessWidget {
                                   ),
                                   Row(
                                     children: [
-                                      Icon(Icons.star, size: 16, color: Colors.amber),
+                                      Icon(Icons.star,
+                                          size: 16, color: Colors.amber),
                                       Text(
                                         product.rating.rate.toString(),
                                         style: TextStyle(fontSize: 12),
@@ -106,7 +111,6 @@ class ProductListScreen extends StatelessWidget {
               },
             );
           }
-          
           return Container();
         },
       ),

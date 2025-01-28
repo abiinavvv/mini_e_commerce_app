@@ -3,12 +3,21 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mini_ec/bloc/cart/cart_bloc.dart';
 import 'package:mini_ec/bloc/cart/cart_event.dart';
 import 'package:mini_ec/bloc/cart/cart_state.dart';
+import 'package:mini_ec/bloc/order/order_bloc.dart';
+import 'package:mini_ec/bloc/order/order_event.dart';
 
 class CartScreen extends StatelessWidget {
+  const CartScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Cart')),
+      appBar: AppBar(
+          centerTitle: true,
+          title: Text(
+            'Cart',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          )),
       body: BlocBuilder<CartBloc, CartState>(
         builder: (context, state) {
           if (state is CartInitial) {
@@ -40,9 +49,15 @@ class CartScreen extends StatelessWidget {
                             width: 50,
                             fit: BoxFit.contain,
                           ),
-                          title: Text(item.product.title),
+                          title: Text(
+                            item.product.title,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 15),
+                          ),
                           subtitle: Text(
                             '\$${(item.product.price * item.quantity).toStringAsFixed(2)}',
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.w900),
                           ),
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,
@@ -50,15 +65,17 @@ class CartScreen extends StatelessWidget {
                               IconButton(
                                 icon: Icon(Icons.remove),
                                 onPressed: () => context.read<CartBloc>().add(
-                                  UpdateQuantity(item.product.id, item.quantity - 1),
-                                ),
+                                      UpdateQuantity(
+                                          item.product.id, item.quantity - 1),
+                                    ),
                               ),
                               Text('${item.quantity}'),
                               IconButton(
                                 icon: Icon(Icons.add),
                                 onPressed: () => context.read<CartBloc>().add(
-                                  UpdateQuantity(item.product.id, item.quantity + 1),
-                                ),
+                                      UpdateQuantity(
+                                          item.product.id, item.quantity + 1),
+                                    ),
                               ),
                             ],
                           ),
@@ -92,18 +109,42 @@ class CartScreen extends StatelessWidget {
                         ],
                       ),
                       SizedBox(height: 16),
-                      ElevatedButton(
-                        child: Text('Checkout'),
-                        style: ElevatedButton.styleFrom(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 48,
-                            vertical: 16,
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: SizedBox(
+                          width: double.infinity,
+                          height: 50,
+                          child: GestureDetector(
+                            onTap: () {
+                              if (state.items.isNotEmpty) {
+                                context.read<OrderBloc>().add(
+                                      PlaceOrder(
+                                        items: state.items,
+                                        total: state.totalAmount,
+                                      ),
+                                    );
+                                Navigator.pushNamed(
+                                    context, '/order-confirmation');
+                              }
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).primaryColor,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  'Order Now',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
+                            ),
                           ),
                         ),
-                        onPressed: () {
-                          // Implement checkout functionality
-                        },
-                      ),
+                      )
                     ],
                   ),
                 ),

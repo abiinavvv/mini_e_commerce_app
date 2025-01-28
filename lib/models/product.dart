@@ -5,8 +5,6 @@ class Product {
   final String description;
   final String image;
   final Rating rating;
-  
-
 
   Product({
     required this.id,

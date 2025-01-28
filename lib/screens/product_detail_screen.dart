@@ -3,15 +3,22 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mini_ec/bloc/cart/cart_bloc.dart';
 import 'package:mini_ec/bloc/cart/cart_event.dart';
 import 'package:mini_ec/models/product.dart';
+import 'package:mini_ec/screens/widgets/animated_add_to_cart_button.dart';
 
 class ProductDetailScreen extends StatelessWidget {
+  const ProductDetailScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     final product = ModalRoute.of(context)!.settings.arguments as Product;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Product Details'),
+        centerTitle: true,
+        title: Text(
+          'Product Details',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         actions: [
           IconButton(
             icon: Icon(Icons.shopping_cart),
@@ -23,7 +30,7 @@ class ProductDetailScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
+            SizedBox(
               height: 300,
               width: double.infinity,
               child: Image.network(
@@ -38,7 +45,9 @@ class ProductDetailScreen extends StatelessWidget {
                 children: [
                   Text(
                     product.title,
-                    style: Theme.of(context).textTheme.titleLarge,
+                    style:TextStyle(fontWeight: FontWeight.w900,
+                      fontSize: 20,
+                    ), 
                   ),
                   SizedBox(height: 8),
                   Row(
@@ -52,7 +61,7 @@ class ProductDetailScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 16),
                   Text(
-                    '\$${product.price.toStringAsFixed(2)}',
+                    '\$ ${product.price.toStringAsFixed(2)}',
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
@@ -62,7 +71,7 @@ class ProductDetailScreen extends StatelessWidget {
                   SizedBox(height: 16),
                   Text(
                     'Description',
-                    style: Theme.of(context).textTheme.titleMedium,
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 8),
                   Text(
@@ -75,20 +84,10 @@ class ProductDetailScreen extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: Padding(
-        padding: EdgeInsets.all(16),
-        child: ElevatedButton(
-          child: Text('Add to Cart'),
-          style: ElevatedButton.styleFrom(
-            padding: EdgeInsets.symmetric(vertical: 16),
-          ),
-          onPressed: () {
-            context.read<CartBloc>().add(AddToCart(product));
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Added to cart')),
-            );
-          },
-        ),
+      bottomNavigationBar: AnimatedAddToCartButton(
+        onPressed: () {
+          context.read<CartBloc>().add(AddToCart(product));
+        },
       ),
     );
   }

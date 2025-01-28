@@ -16,8 +16,15 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       emit(CartLoaded(_items, _calculateTotal()));
     });
 
+    on<ClearCart>((event, emit) {
+      _items.clear();
+      _saveCart();
+      emit(CartLoaded(_items, 0));
+    });
+
     on<AddToCart>((event, emit) {
-      final existingIndex = _items.indexWhere((item) => item.product.id == event.product.id);
+      final existingIndex =
+          _items.indexWhere((item) => item.product.id == event.product.id);
       if (existingIndex >= 0) {
         _items[existingIndex].quantity++;
       } else {
@@ -34,7 +41,8 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     });
 
     on<UpdateQuantity>((event, emit) {
-      final index = _items.indexWhere((item) => item.product.id == event.productId);
+      final index =
+          _items.indexWhere((item) => item.product.id == event.productId);
       if (index >= 0) {
         if (event.quantity > 0) {
           _items[index].quantity = event.quantity;
@@ -48,11 +56,13 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   }
 
   double _calculateTotal() {
-    return _items.fold(0, (sum, item) => sum + (item.product.price * item.quantity));
+    return _items.fold(
+        0, (sum, item) => sum + (item.product.price * item.quantity));
   }
 
   void _saveCart() {
-    final String cartJson = json.encode(_items.map((item) => item.toJson()).toList());
+    final String cartJson =
+        json.encode(_items.map((item) => item.toJson()).toList());
     prefs.setString('cart', cartJson);
   }
 
