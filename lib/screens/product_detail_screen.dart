@@ -49,7 +49,7 @@ class ProductDetailScreen extends StatelessWidget {
                       fontSize: 20,
                     ), 
                   ),
-                  SizedBox(height: 8),
+                  SizedBox(height: 9),
                   Row(
                     children: [
                       Icon(Icons.star, color: Colors.amber),
