@@ -34,7 +34,7 @@ class ApiService {
       if (response.statusCode == 201) {
         final responseData = json.decode(response.body);
 
-        // Create a new Order object with the ID from the response
+        // Create a new Order object with the ID from the responses
         return Order(
           id: responseData['id'].toString(),
           items: order.items,

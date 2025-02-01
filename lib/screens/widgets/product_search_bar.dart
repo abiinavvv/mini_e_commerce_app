@@ -6,6 +6,8 @@ import 'package:mini_ec/bloc/product/product_bloc.dart';
 import 'package:mini_ec/bloc/product/product_event.dart';
 
 class ProductSearchBar extends StatefulWidget {
+  const ProductSearchBar({super.key});
+
   @override
   _ProductSearchBarState createState() => _ProductSearchBarState();
 }
